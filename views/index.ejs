@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capital City Quiz</title>
+  <link rel="stylesheet" href="/styles/main.css">
+  <style>
+   body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    .answer-container {
+      margin-top: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 1em;
+    }
+
+    .checkmark,
+    .cross {
+      font-size: 1.5em;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    .restart-button {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      text-decoration: none;
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        max-width: 100%;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+
+<body id="app">
+  <form class="container" action="/submit" method="post" onsubmit="return validate()">
+    <div class="horizontal-container">
+      <h3>
+        Total Score:
+        <span id="score">
+          <%= locals.totalScore ? totalScore : "0" %>
+        </span>
+      </h3>
+    </div>
+
+    <h1 id="countryName">
+      <%=question.country %>
+    </h1>
+    <div class="answer-container">
+      <input type="text" name="answer" id="userInput" placeholder="Enter the capital"  autofocus autocomplete="off">
+      <p style="color: red;" id="inputError"></p>
+    </div>
+    <button  type="submit">
+      SUBMIT
+      <% if(locals.wasCorrect){ %>
+      <span class="checkmark">✔</span>
+      <% } else if (locals.wasCorrect===false) { %>
+      <span class="cross" id="error">✖</span>
+      <% } %>
+    </button>
+  </form>
+  <script>
+    var wasCorrect = "<%= locals.wasCorrect %>";
+    console.log(wasCorrect)
+    if (wasCorrect === "false") {
+      alert('Game over! Final best score: <%= locals.totalScore %>');
+      
+      document.getElementById("app").innerHTML = '  <div class="restart-container"><a href="/" class="restart-button">Restart</a></div>'
+    }
+  </script>
+</body>
+
+<script>
+
+function validate(){
+
+
+  const userInput = document.getElementById('userInput');
+  const error  = document.getElementById('inputError');
+  const input = userInput.value;
+
+  if(!input.trim()){
+
+    error.innerHTML = 'Please enter a capital'
+
+    return false;
+  }
+
+  return true;
+}
+</script>
+</html>
